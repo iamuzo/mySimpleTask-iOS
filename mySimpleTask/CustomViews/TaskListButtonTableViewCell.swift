@@ -8,7 +8,13 @@
 
 import UIKit
 
+protocol TaskListButtonTableViewCellDelegate: class {
+    func taskIsCompleteButtonWasTapped(_ sender: TaskListButtonTableViewCell)
+}
+
 class TaskListButtonTableViewCell: UITableViewCell {
+    
+    var delegate: TaskListButtonTableViewCellDelegate?
     
     //MARK:- Outlets
     @IBOutlet weak var taskNameLabel: UILabel!
@@ -17,7 +23,10 @@ class TaskListButtonTableViewCell: UITableViewCell {
     
     //MARK: Actions
     @IBAction func taskIsCompleteButttonTapped(_ sender: UIButton) {
+        /// when this button is tapped, we call on the delegate to perform an action
+        /// in this call we want to toggle (that is switch the isComplete attribute)
         print("Hello")
+        delegate?.taskIsCompleteButtonWasTapped(self)
     }
     
     //MARK:- Custom Methods
@@ -39,17 +48,18 @@ class TaskListButtonTableViewCell: UITableViewCell {
         
     }
     
-    //fileprivate func createImageButtonUsing(task: Task) {
-    //    let button = UIButton(frame: CGRect(x: 100, y: 100, width: 200, height: 200))
-    //    button.imageView?.contentMode = ContentMode.scaleAspectFit
-    //    let imageName = task.isComplete ? "complete" : "incomplete"
-    //    button.setImage(UIImage(named: imageName), for: .normal)
-    //    button.addTarget(self, action: #selector(toggleButton), for: UIControl.Event.touchUpInside)
-    //    self.addSubview(button)
-    //}
-    //@objc func toggleButton() {
-    //    print("Toggle the Image")
-    //}
+    fileprivate func createImageButtonUsing(task: Task) {
+        let button = UIButton(frame: CGRect(x: 100, y: 100, width: 200, height: 200))
+        button.imageView?.contentMode = ContentMode.scaleAspectFit
+        let imageName = task.isComplete ? "complete" : "incomplete"
+        button.setImage(UIImage(named: imageName), for: .normal)
+        button.addTarget(self, action: #selector(toggleButton), for: UIControl.Event.touchUpInside)
+        self.addSubview(button)
+    }
+    
+    @objc func toggleButton() {
+        print("Toggle the Image")
+    }
     
 }
 
