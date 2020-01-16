@@ -22,6 +22,7 @@ class TaskListTableViewController: UITableViewController {
     // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
+        
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -30,10 +31,10 @@ class TaskListTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "taskCell", for: indexPath) as? TaskListButtonTableViewCell else { return UITableViewCell() }
-        
         let task = TaskController.sharedGlobalInstance.tasks[indexPath.row]
         
         cell.updateCell(withTask: task)
+        cell.delegate = self
         return cell
     }
     
@@ -61,5 +62,23 @@ class TaskListTableViewController: UITableViewController {
             destination.task = task
         }
     }
+    
+}
+
+extension TaskListTableViewController: TaskListButtonTableViewCellDelegate {
+    func taskIsCompleteButtonWasTapped(_ sender: TaskListButtonTableViewCell) {
+        /// get the indexPath of the sender; that is the the cell that was tapped
+        guard let indexPath = tableView.indexPath(for: sender) else { return }
+        
+        /// use that index to get the Task
+        let task = TaskController.sharedGlobalInstance.tasks[indexPath.row]
+        
+        // use the model controller to handle the isComplete attribute of the Task
+        TaskController.sharedGlobalInstance.toggleIsCompleteFor(task: task)
+        
+        // update the cell
+        sender.updateCell(withTask: task)
+    }
+    
     
 }
