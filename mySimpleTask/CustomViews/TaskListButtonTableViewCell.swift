@@ -25,7 +25,6 @@ class TaskListButtonTableViewCell: UITableViewCell {
     @IBAction func taskIsCompleteButttonTapped(_ sender: UIButton) {
         /// when this button is tapped, we call on the delegate to perform an action
         /// in this call we want to toggle (that is switch the isComplete attribute)
-        print("Hello")
         delegate?.taskIsCompleteButtonWasTapped(self)
     }
     
@@ -44,22 +43,6 @@ class TaskListButtonTableViewCell: UITableViewCell {
             taskDueDateLabel.text = "Task has no due date"
         }
         updateTaskIsCompleteButton(existingTask.isComplete)
-        //createImageButtonUsing(task: existingTask)
-        
     }
-    
-    fileprivate func createImageButtonUsing(task: Task) {
-        let button = UIButton(frame: CGRect(x: 100, y: 100, width: 200, height: 200))
-        button.imageView?.contentMode = ContentMode.scaleAspectFit
-        let imageName = task.isComplete ? "complete" : "incomplete"
-        button.setImage(UIImage(named: imageName), for: .normal)
-        button.addTarget(self, action: #selector(toggleButton), for: UIControl.Event.touchUpInside)
-        self.addSubview(button)
-    }
-    
-    @objc func toggleButton() {
-        print("Toggle the Image")
-    }
-    
 }
 

@@ -16,17 +16,21 @@ class TaskController {
     static let sharedGlobalInstance = TaskController()
     
     //MARK:- Property
-    /**
-     Source of truth
-     - Creates an array of Task Objects, which either contain
-        - the results of a fetchRequest OR
-        - an empty array
-     - fetchRequest: We set our fetchRequest to be *of type* a `NSFetchRequest` that can interact with `Task` objects
-     - returns: the results of our fetch request *or* an empty array
-     */
-    var tasks: [Task] {
-        let fetchRequest: NSFetchRequest<Task> = Task.fetchRequest()
-        return (try? CoreDataStack.context.fetch(fetchRequest)) ?? []
+    var fetchedResultsController: NSFetchedResultsController<Task>
+    
+    init(){
+        let request: NSFetchRequest<Task> = Task.fetchRequest()
+        
+        request.sortDescriptors = [NSSortDescriptor(key: "isComplete", ascending: true)]
+        
+        let resultsController: NSFetchedResultsController<Task> = NSFetchedResultsController(fetchRequest: request, managedObjectContext: CoreDataStack.context, sectionNameKeyPath: "Complete", cacheName: nil)
+        fetchedResultsController = resultsController
+        
+        do {
+            try fetchedResultsController.performFetch()
+        } catch {
+            print("there was an error performing the fetch. \(error.localizedDescription)")
+        }
     }
     
     //MARK: CRUD
