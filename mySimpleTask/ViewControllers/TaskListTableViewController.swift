@@ -47,6 +47,10 @@ class TaskListTableViewController: UITableViewController {
             TaskController.sharedGlobalInstance.delete(task: task)
         }
     }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if TaskController.sharedGlobalInstance.fetchedResultsController.sections?[section].name == "0" { return "Incomplete"} else { return "Completed"}
+    }
 
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
